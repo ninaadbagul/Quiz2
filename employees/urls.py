@@ -6,6 +6,7 @@ from .views import (
     EmployeeListCreateView,
     EmployeeSummaryView,
     AnalyticsSummaryView,
+    EmployeeExportView,
     health_check,
 )
 
@@ -22,6 +23,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('employees/', EmployeeListCreateView.as_view(), name='employee-list-create'),
     path('employees/<int:pk>/summary/', EmployeeSummaryView.as_view(), name='employee-summary'),
+    path('employees/export/', EmployeeExportView.as_view(), name='employee-export'),  # ✅ CSV export
     path('analytics/summary/', AnalyticsSummaryView.as_view(), name='analytics-summary'),
     path('health/', health_check, name='health-check'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

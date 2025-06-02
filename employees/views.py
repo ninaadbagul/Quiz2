@@ -5,7 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Employee, Attendance, Performance
 from .serializers import EmployeeSerializer, AttendanceSerializer, PerformanceSerializer
 from django.db.models import Avg, Count
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+import csv
 
 # Health check endpoint
 def health_check(request):
@@ -52,3 +53,16 @@ class AnalyticsSummaryView(views.APIView):
             "attendance_breakdown": attendance_count,
             "total_employees": total_employees
         })
+
+class EmployeeExportView(views.APIView):
+    def get(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="employees.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Name', 'Department', 'Designation', 'Location'])
+
+        for emp in Employee.objects.all():
+            writer.writerow([emp.id, emp.name, emp.department, emp.designation, emp.location])
+
+        return response
