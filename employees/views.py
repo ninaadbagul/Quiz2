@@ -5,6 +5,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Employee, Attendance, Performance
 from .serializers import EmployeeSerializer, AttendanceSerializer, PerformanceSerializer
 from django.db.models import Avg, Count
+from django.http import JsonResponse
+
+# Health check endpoint
+def health_check(request):
+    return JsonResponse({"status": "ok"})
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -16,14 +21,8 @@ class EmployeeListCreateView(generics.ListCreateAPIView):
     serializer_class = EmployeeSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-
-    # Fields for exact filtering
     filterset_fields = ['department', 'designation', 'location']
-
-    # Fields for search
     search_fields = ['name', 'department', 'designation', 'location']
-
-    # Fields for ordering
     ordering_fields = ['name', 'date_joined']
 
 class EmployeeSummaryView(views.APIView):
