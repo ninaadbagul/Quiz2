@@ -12,6 +12,10 @@ import csv
 def health_check(request):
     return JsonResponse({"status": "ok"})
 
+# Homepage view
+def homepage(request):
+    return HttpResponse("<h1>Welcome to the Employee Analytics API</h1><p>Visit <a href='/swagger/'>Swagger Docs</a> for API usage.</p>")
+
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
